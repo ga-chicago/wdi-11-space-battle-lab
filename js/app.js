@@ -6,7 +6,7 @@
 // round Math.random() in below function to 2 decimal places
 
 const getRandomNum = (max) => {
-  return (Math.random().toFixed(2)) * Math.floor(max);
+  return (Math.random() * Math.floor(max)).toFixed(2);
 };
 
 // create functions to generate random alien hulls, firepowers, accuracies
@@ -39,8 +39,7 @@ const getAlienAccuracy = () => {
 class Ship {
 	// need to be able to input all three parameters when calling
 	// an instance of an object
-	constructor(name, hull, firepower, accuracy) {
-		this.name = name,
+	constructor(hull, firepower, accuracy) {
 		this.hull = hull;
 		this.firepower = firepower;
 		this.accuracy = accuracy;
@@ -57,41 +56,72 @@ class Ship {
 			// firepower - hull = damage
 			health = (health - firepower).toFixed(2);
 			console.log(targetShip.name + " has been hit!");
-			console.log(targetShip.name + " has " + health + " health left.");
 			if (health <= 0) {
 				console.log(targetShip.name + " has been destroyed.");
-				// deploy another alien ship
+				// call another endOfTurn function?
+				// deploy another alien ship or game over
 				// introduce choice for player to either retreat or keep fighting
 				// using a prompt
 			}
+		console.log(targetShip.name + " has " + health + " health left.");
 		} else {
 			console.log(this.name + " missed!");
 		}
-	// display remaining health?
 	}
 }
 
 // build AlienShip class inherited from ship class
 class AlienShip extends Ship {
-	constructor(name, hull, firepower, accuracy) {
+	constructor(hull, firepower, accuracy, serialNumber) {
 		//name should be something like alienship1,alienship2,etc.
+		super (hull, firepower, accuracy);
 		this.name = "Alien";
-		this.hull = hull;
-		this.firepower = firepower;
-		this.accuracy = accuracy;
+		this.serialNumber = serialNumber;
 	}
 }
+
 // build alienShip factory to store array of alien ships
 
-const alienShip = new Ship ("Alien", getAlienHull(), getAlienFirepower(), getAlienAccuracy());
+const alienShipFactory = {
+	ships: [],
+	amountShips: 0,
+	generateAlienShip(){
+		this.amountShips += 1;
+		const newAlienShip = new AlienShip (getAlienHull(), getAlienFirepower(), getAlienAccuracy(), this.ships.length);
+		this.ships.push(newAlienShip);
+		return newAlienShip;
+	},
+	findAlienShip(index){
+		return this.ships[index];
+	}
+}
 
-// create instance of player ship using ship class
+// create of player ship class by inheriting ship class
 
-const playerShip = new Ship ("USS Assembly", 20, 5, .7);
+class PlayerShip extends Ship {
+	constructor (hull, firepower, accuracy) {
+		super (hull, firepower, accuracy);
+		this.name = "USS Assembly";
+	}
+}
 
-console.log(alienShip, playerShip);
+// generate alien ships
+// later could create a function to generate n ships
+
+const alien1 = alienShipFactory.generateAlienShip();
+const alien2 = alienShipFactory.generateAlienShip();
+const alien3 = alienShipFactory.generateAlienShip();
+const alien4 = alienShipFactory.generateAlienShip();
+const alien5 = alienShipFactory.generateAlienShip();
+const alien6 = alienShipFactory.generateAlienShip();
+
+// generate player ship
+const playerShip = new PlayerShip (20, 5, 0.7);
+
+// console.log(alien1,alien2,alien3,alien4,alien5,alien6,playerShip);
+
 // create function to take turn
-// at the end of each turn I should be able to choose to retreat or keep battling
+// at the end of each turn, if I win, I should be able to choose to retreat or keep battling
 // set conditions for game over if I am destroyed
 // set conditions for if I win
 
