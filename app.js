@@ -39,20 +39,65 @@ class Ship {
     this.accuracy = accuracy;
   }
   greeting(){
-  console.log("this is an attack!");
+    console.log("this is an attack!");
   }
 }
 
 // created a variable to randomly generate alien firepower, hull, etc to new alien ships.
 const alienHullArr = [3, 4, 5, 6];
-alienHull = alienHullArr[Math.floor(Math.random() * alienHullArr.length)];
+  alienHull = alienHullArr[Math.floor(Math.random() * alienHullArr.length)];
 //loop through array, then use Math.random to pull out random number
 const alienfirepowerArr = [2, 3, 4];
-alienFirepower = alienfirepowerArr[Math.floor(Math.random() * alienfirepowerArr.length)];
+  alienFirepower = alienfirepowerArr[Math.floor(Math.random() * alienfirepowerArr.length)];
 
 const alienAccuracyArr = [.6, .7, .8];
-alienAccuracy = alienAccuracyArr[Math.floor(Math.random() * alienAccuracyArr.length)]
+  alienAccuracy = alienAccuracyArr[Math.floor(Math.random() * alienAccuracyArr.length)]
 
 const ussAssembly = new Ship("USS Assembly", 20, 5, .7)
 
 const alienShip1 = new Ship("Alien Ship 1", alienHull, alienFirepower, alienAccuracy)
+const alienShip2 = new Ship("Alien Ship 2", alienHull, alienFirepower, alienAccuracy)
+
+//create game class
+
+class SpaceBattle {
+//pull in each player in constructor
+  constructor(ussAssembly, alienShip1) {
+    this.ussAssembly = ussAssembly;
+    this.alienShip1 = alienShip1;
+  }
+  ussattack() {
+    //You attack the first alien ship
+    //Make sure both hulls are above 0, otherwise, what is the point?
+    if (this.alienShip1.hull > 0) {
+      console.log("USS assembly to attack");
+
+    if(Math.random() < this.ussAssembly.accuracy) {
+      this.alienShip1.hull = this.alienShip1.hull - this.ussAssembly.firepower;
+        console.log("You hit the alien ship. The hull is now " + this.alienShip1.hull + ".");
+        } else {
+          console.log("you missed the alien ship. The hull remains " + this.alienShip1.hull + ".");
+        }
+    if(this.alienShip1.hull > 0) {
+      console.log("alien ship to attack");
+        } else {
+          console.log("alien ship destroyed!");
+      }
+    }
+  }
+  alienattack() {
+  if(Math.random() < this.alienShip1.accuracy) {
+    this.ussAssembly.hull = this.ussAssembly.hull - this.alienShip1.firepower;
+    console.log("You've been hit. The USS Assembly hull is now " + this.ussAssembly.hull + ".");
+    } else {
+      console.log("Alien attack missed! The USS hull remains intact.");
+    }
+  if(this.ussAssembly.hull > 0) {
+    console.log("USS Assembly to attack!");
+  } else {
+    console.log("USS Assembly destroyed.");
+    }
+  }
+}
+
+const game1 = new SpaceBattle(ussAssembly, alienShip1)
