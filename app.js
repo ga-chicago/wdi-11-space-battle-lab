@@ -38,11 +38,21 @@ class Ship {
     this.firepower = firepower;
     this.accuracy = accuracy;
   }
-  attack(){
+  greeting(){
   console.log("this is an attack!");
   }
 }
 
+// created a variable to randomly generate alien firepower, hull, etc to new alien ships.
+const alienHullArr = [3, 4, 5, 6];
+alienHull = alienHullArr[Math.floor(Math.random() * alienHullArr.length)];
+//loop through array, then use Math.random to pull out random number
+const alienfirepowerArr = [2, 3, 4];
+alienFirepower = alienfirepowerArr[Math.floor(Math.random() * alienfirepowerArr.length)];
+
+const alienAccuracyArr = [.6, .7, .8];
+alienAccuracy = alienAccuracyArr[Math.floor(Math.random() * alienAccuracyArr.length)]
+
 const ussAssembly = new Ship("USS Assembly", 20, 5, .7)
 
-const alienShip = new Ship("Alien ship", [3, 4, 5, 6], [2, 3, 4], [.6, .7, .8])
+const alienShip1 = new Ship("Alien Ship 1", alienHull, alienFirepower, alienAccuracy)
