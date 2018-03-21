@@ -9,12 +9,7 @@ class Ship {
 		this.firepower= firepower;
 		this.accuracy = accuracy;
 	}
-	hullDecrement(){
-
-	}
-	firePowerIncrement(){
-
-	}
+	
 	shoot(){
 		return Math.random();
 	}
@@ -26,7 +21,7 @@ class Ship {
 const ussAssembly = new Ship(20,5,.7);
 
 
-const alien1 = new Ship(3,2,.6);
+const alien1= new Ship(3,2,.6);
 
 const alien2 = new Ship(3,2,.6);
 
@@ -44,66 +39,78 @@ const alien6 = new Ship(6,4,.8);
 
 const spaceBattleGame = {
 	aliens:[alien1,alien2,alien3,alien4,alien5,alien6],
-
 	currentAlienInBattle(){
 		for(let i = 0; i < this.aliens.length; i ++){
 			
-			this.battle(this.aliens[i]);
+			let doContinue = prompt('Do you want to continue?"Yes" to continue, "No" to retreat.');
+
+			
+			if(doContinue !== 'Yes' || ussAssembly.hull <= 0){
+				console.log('Game Over!',ussAssembly);
+			
+				break;
+			}
+			
+				
+			else{this.battle(this.aliens[i],[i]);}
 
 
 		}
+		
+		
 	},
-	battle(theAlien){
+	battle(theAlien,i){
 
 
 
 		while(theAlien.hull > 0 && ussAssembly.hull > 0){
 
 			if(ussAssembly.shoot() >= ussAssembly.accuracy){
-				console.log('You hit the alien ship');
+				console.log('You hit alien number '+ i + ' ship');
 				theAlien.hull -= ussAssembly.firepower
-				console.log(theAlien.hull);
+				console.log('Alien number ' + i + ' hull: ' + theAlien.hull);
 				if(theAlien.hull > 0){
 					if(theAlien.shoot() >= theAlien.accuracy){
-						console.log('The Alien shot back and hit you');
+						console.log('Alien number '+i+' shot back and hit you');
 						ussAssembly.hull -= theAlien.firepower;
 					}
+					else{console.log('Alien number '+i+' missed');}
 				}
-				else{console.log("You killed the Alien");}
+				else{console.log("You killed Alien number "+i+'. ');}
 			}
 
 			else if(theAlien.shoot() >= theAlien.accuracy){
-				console.log('You missed the Alien and he hit you');
+				
+				console.log('You missed Alien number '+i+' and he hit you');
+				
 				ussAssembly.hull -= theAlien.firepower
+				
 				console.log(ussAssembly.hull);
+				
 				if(ussAssembly.hull >0){
+				
 					if(ussAssembly.shoot() >= ussAssembly.accuracy){
-						console.log('You hit the Alien');
+				
+						console.log('You fired back and hit alien number '+ i);
+				
 						theAlien.hull -= ussAssembly.firepower;
+				
 					}
-				}
-			}
-
-
-
-
-			// if(ussAssembly.shoot() >= ussAssembly.accuracy){
-			// 	console.log('You hit the alien ship!');
-			// 	theAlien.hull -= ussAssembly.firepower;
-			// 	console.log(theAlien.hull);
-			// 	if(theAlien.hull <= 0){
-			// 		//this.aliens.shift();
-			// 		break();
-			// 	}
-			// 	else if(theAlien.shoot()>= theAlien.accuracy){
-			// 	console.log("You've been hit!");
-			// 	ussAssembly.hull -= theAlien.firepower;
-			// 	console.log(ussAssembly.hull);
-			// 	}
-			// }
+				
+					else{console.log('You missed again');}
+				}	
 			
+			}
+		
 		}
-	},
+
+		if(this.aliens[this.aliens.length-1].hull <= 0 ){
+			console.log('Congrats! You killed all the aliens',ussAssembly);
+		}
+		else if(ussAssembly.hull <=0 ){console.log("You lost!",ussAssembly);}			
+
+
+	}
 	
 
 }
