@@ -33,13 +33,15 @@ class SpaceBattle {
 			this.alienShip.hull = this.alienShip.hull - this.ussAssembly.firepower;
 			console.log("You hit the alien ship! The alien ship's hull is " + this.alienShip.hull + '.');
 			if (this.alienShip.hull > 0) {
-				console.log('Attn: USS Assembly - Prepare for incoming attack!');
-				game1.alienAttack();
-				//let cont = prompt("Continue? 'Yes' or 'No'");
-				//if (cont == 'yes'){
-					//game1.ussAttack();
-				//} else {
-					//console.log("GAME OVER.");
+				// console.log('Attn: USS Assembly - Prepare for incoming attack!');
+				// game1.alienAttack();
+				let cont = prompt("Retreat? 'Yes' or 'No'");
+				if (cont == 'No'){
+					console.log('Attn: USS Assembly - Prepare for incoming attack!');
+					game1.ussAttack();
+				} else {
+					console.log("USS Assembly is retreating! GAMEOVER.");
+				}
 				} else {
 					console.log('Alien ship destroyed!');
 					console.log('GAMEOVER');
