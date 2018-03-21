@@ -114,41 +114,81 @@ class PlayerShip extends Ship {
 // generate alien ships
 // later could create a function to generate n ships
 
-const alien1 = alienShipFactory.generateAlienShip();
-const alien2 = alienShipFactory.generateAlienShip();
-const alien3 = alienShipFactory.generateAlienShip();
-const alien4 = alienShipFactory.generateAlienShip();
-const alien5 = alienShipFactory.generateAlienShip();
-const alien6 = alienShipFactory.generateAlienShip();
-
-// generate player ship
-const playerShip = new PlayerShip (20, 5, 0.7);
-
-console.log(alien1,alien2,alien3,alien4,alien5,alien6,playerShip);
-
-const gameTurn = () => {
-	// player attack
-
-	// set conditions for game over if I am destroyed
-	// set conditions for if I win
+const makeAlienShips = (numShips) => {
+	for (let i = 0; i < numShips; i++){
+		alienShipFactory.generateAlienShip();
+	}
 }
 
-// at the end of each turn, if I win, I should be able to choose to retreat or keep battling
-const playerChoice = () => {
-	let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
-	gamePrompt;
-	if (gamePrompt === "Yes") {
-		return console.log("Game over.");
-	} else if (gamePrompt === "No") {
-		console.log("Another alien ship approaches!");
-		return gameTurn();
-	} else {
-		// if player doesn't respond with Yes or No
-		console.log("Please respond 'Yes' or 'No'");
+
+
+makeAlienShips(6);
+
+// const alien1 = alienShipFactory.generateAlienShip();
+// const alien2 = alienShipFactory.generateAlienShip();
+// const alien3 = alienShipFactory.generateAlienShip();
+// const alien4 = alienShipFactory.generateAlienShip();
+// const alien5 = alienShipFactory.generateAlienShip();
+// const alien6 = alienShipFactory.generateAlienShip();
+
+// generate player ship
+// const playerShip = new PlayerShip (20, 5, 0.7);
+
+
+const game = {
+
+	playerShip: new PlayerShip (20, 5, 0.7),
+	playerChoice () {
+		let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
 		gamePrompt;
+		if (gamePrompt === "Yes") {
+			return console.log("Game over.");
+		} else if (gamePrompt === "No") {
+			console.log("Another alien ship approaches!");
+			return gameTurn();
+		} else {
+			// if player doesn't respond with Yes or No
+			console.log("Please respond 'Yes' or 'No'");
+			gamePrompt;
+		}
+	},
+	gameTurn () {
+		// player attack then alien attack until one is destroyed
+		// set conditions for if I lose or if I win
+		
+	},
+	gameOver () {
+		// set conditions for game over if I am destroyed
+		// set conditions for if I win
 	}
 };
 
+
 // create function to take turn
+// const gameTurn = () => {
+// 	// player attack
+
+// 	// set conditions for game over if I am destroyed
+// 	// set conditions for if I win
+// }
+
+// at the end of each turn, if I win, I should be able to choose to retreat or keep battling
+// const playerChoice = () => {
+// 	let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
+// 	gamePrompt;
+// 	if (gamePrompt === "Yes") {
+// 		return console.log("Game over.");
+// 	} else if (gamePrompt === "No") {
+// 		console.log("Another alien ship approaches!");
+// 		return gameTurn();
+// 	} else {
+// 		// if player doesn't respond with Yes or No
+// 		console.log("Please respond 'Yes' or 'No'");
+// 		gamePrompt;
+// 	}
+// };
+
+console.log(game.playerShip, alienShipFactory.ships);
+
 
 
