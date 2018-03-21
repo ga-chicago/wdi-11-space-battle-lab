@@ -1,12 +1,16 @@
 // define ship class to use to build every instance of player ship and alien ships
 // all ships need hull (health), firepower (attack), accuracy (chance attack will hit)
 
-// function to generate random number between 0 and specified param
+// function to generate random number between 0 and specified param to use to define alien ship properties
 
 // round Math.random() in below function to 2 decimal places
 
 const getRandomNum = (max) => {
-  return (Math.random() * Math.floor(max)).toFixed(2);
+	num = Math.random() * Math.floor(max);
+	// round the result so the output is more friendly
+	roundedString = num.toFixed(2)
+	roundedNum = Number(roundedString);
+  	return roundedNum;
 };
 
 // create functions to generate random alien hulls, firepowers, accuracies
@@ -31,9 +35,11 @@ const getAlienFirepower = () => {
 
 const getAlienAccuracy = () => {
 	// accuracy is between .6 and .8 <-- range .2
-	// max = 2 / 10 = 0.2
-	randomNum = getRandomNum(2) / 10;
-	return randomNum + 0.4;
+	// randomNum is between 0 and 1. 1/5 = 0.2 max
+	// add 0.4 to make it between 0.6 and 0.8
+	randomNum = getRandomNum(1);
+	randomNumDiv5 = randomNum / 5;
+	return randomNumDiv5 + 0.6;
 }
 
 class Ship {
@@ -118,10 +124,31 @@ const alien6 = alienShipFactory.generateAlienShip();
 // generate player ship
 const playerShip = new PlayerShip (20, 5, 0.7);
 
-// console.log(alien1,alien2,alien3,alien4,alien5,alien6,playerShip);
+console.log(alien1,alien2,alien3,alien4,alien5,alien6,playerShip);
+
+const gameTurn = () => {
+	// player attack
+
+	// set conditions for game over if I am destroyed
+	// set conditions for if I win
+}
+
+// at the end of each turn, if I win, I should be able to choose to retreat or keep battling
+const playerChoice = () => {
+	let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
+	gamePrompt;
+	if (gamePrompt === "Yes") {
+		return console.log("Game over.");
+	} else if (gamePrompt === "No") {
+		console.log("Another alien ship approaches!");
+		return gameTurn();
+	} else {
+		// if player doesn't respond with Yes or No
+		console.log("Please respond 'Yes' or 'No'");
+		gamePrompt;
+	}
+};
 
 // create function to take turn
-// at the end of each turn, if I win, I should be able to choose to retreat or keep battling
-// set conditions for game over if I am destroyed
-// set conditions for if I win
+
 
