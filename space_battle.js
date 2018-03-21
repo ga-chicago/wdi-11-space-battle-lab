@@ -18,5 +18,33 @@ const ussAssembly = new Player ('USS Assembly', 20, 5, .7);
 console.log(ussAssembly);
 
 //create Alien Ship with random values for hull, firepower, and accuracy.
-const alienShip1 = new Player ('Alien Ship 1', hullParam[Math.floor(Math.random() * hullParam.length)], fireParam[Math.floor(Math.random() * fireParam.length)], accParam[Math.floor(Math.random() * accParam.length)]);
+const alienShip1 = new Player ('Alien Ship 1', 10 , accParam[Math.floor(Math.random() * accParam.length)]);
 console.log(alienShip1);
+
+class SpaceBattle {
+	constructor(ussAssembly, alienShip){
+		this.ussAssembly = ussAssembly;
+		this.alienShip = alienShip;
+	}
+	attack(){
+	if(this.ussAssembly.hull > 0 && this.alienShip.hull >0){
+	let cont = true; 
+		if (Math.random() < this.ussAssembly.accuracy) {
+			console.log('You hit the alien ship!');
+			this.alienShip.hull = this.alienShip.hull - this.ussAssembly.firepower;
+			if (this.alienShip.hull > 0) {
+				console.log('Alien Ship still intact. Attack again?');
+				cont = prompt("Continue? 'true' (yes) or 'false' (no)?");
+				} else {
+					console.log('Alien ship destroyed!');
+				}
+			} else {
+				console.log('You missed the alien ship!');
+			}
+		} else {
+			console.log('Alien ship destroyed.')
+		} 
+	} 
+};
+
+const game1 = new SpaceBattle(ussAssembly, alienShip1);
