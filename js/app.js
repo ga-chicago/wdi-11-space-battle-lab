@@ -52,7 +52,7 @@ class Ship {
 	}
 	// need to build a method to fire upon a target
 	fire(targetShip) {
-		// set accuracy to a variable
+		// set accuracy, firepower, health to a variable
 		let accuracy = this.accuracy;
 		let firepower = this.firepower;
 		let health = targetShip.hull;
@@ -60,23 +60,31 @@ class Ship {
 		if (Math.random() <= accuracy) {
 			// some way to determine how much damage is done to target ship
 			// firepower - hull = damage
-			health = (health - firepower).toFixed(2);
-			console.log(targetShip.name + " has been hit!");
-			if (health <= 0) {
-				console.log(targetShip.name + " has been destroyed.");
-				// call another endOfTurn function?
-				// deploy another alien ship or game over
-				// introduce choice for player to either retreat or keep fighting
-				// using a prompt
+			targetShip.hull = (health - firepower);
+			console.log(targetShip.name + " has been hit!");	
+			console.log(targetShip.name + " has " + health + " health left.");
+			if (targetShip === game.playerShip) {
+				// if the alien shot at the player, it's the player's turn
+				return game.playerAttack();
+			} else if (targetShip === alienShipFactory.ships[0]) {
+				// if the player shot at the alien, it's the alien's turn
+				return game.alienAttack();
 			}
-		console.log(targetShip.name + " has " + health + " health left.");
 		} else {
 			console.log(this.name + " missed!");
+			if (targetShip === game.playerShip) {
+				// if the alien shot at the player, it's the player's turn
+				return game.playerAttack();
+			} else if (targetShip === alienShipFactory.ships[0]) {
+				// if the player shot at the alien, it's the alien's turn
+				return game.alienAttack();
+			}
 		}
 	}
 }
 
 // build AlienShip class inherited from ship class
+
 class AlienShip extends Ship {
 	constructor(hull, firepower, accuracy, serialNumber) {
 		//name should be something like alienship1,alienship2,etc.
@@ -112,7 +120,7 @@ class PlayerShip extends Ship {
 }
 
 // generate alien ships
-// later could create a function to generate n ships
+// create a function to generate n ships
 
 const makeAlienShips = (numShips) => {
 	for (let i = 0; i < numShips; i++){
@@ -120,23 +128,8 @@ const makeAlienShips = (numShips) => {
 	}
 }
 
-
-
-makeAlienShips(6);
-
-// const alien1 = alienShipFactory.generateAlienShip();
-// const alien2 = alienShipFactory.generateAlienShip();
-// const alien3 = alienShipFactory.generateAlienShip();
-// const alien4 = alienShipFactory.generateAlienShip();
-// const alien5 = alienShipFactory.generateAlienShip();
-// const alien6 = alienShipFactory.generateAlienShip();
-
-// generate player ship
-// const playerShip = new PlayerShip (20, 5, 0.7);
-
-
 const game = {
-
+	alienShips: makeAlienShips(6),
 	playerShip: new PlayerShip (20, 5, 0.7),
 	playerChoice () {
 		let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
@@ -145,50 +138,57 @@ const game = {
 			return console.log("Game over.");
 		} else if (gamePrompt === "No") {
 			console.log("Another alien ship approaches!");
-			return gameTurn();
+			return this.playerAttack();
 		} else {
 			// if player doesn't respond with Yes or No
 			console.log("Please respond 'Yes' or 'No'");
 			gamePrompt;
 		}
 	},
-	gameTurn () {
-		// player attack then alien attack until one is destroyed
-		// set conditions for if I lose or if I win
-		
+	// separate gameTurn method into playerAttack and alienAttack that can call each other
+	playerAttack () {
+		let target = alienShipFactory.ships[0];
+		if (target.hull <= 0) {
+			// if alien is destroyed
+			console.log(target.name + " has been destroyed.");
+			// if destroyed, we will need to remove the first ship from that array
+			alienShipFactory.ships.shift();
+			// set condition for if no alien ships are left
+			if (alienShipFactory.ships.length === 0) {
+				// if all aliens are destroyed, end game
+				return this.gameOver();
+			}
+			// bring back prompt
+			return this.playerChoice();
+		} else {
+
+			return this.playerShip.fire(target);
+			// return this.alienAttack();
+		}
+	},
+	alienAttack () {
+		let target = this.playerShip;
+
+		if (target.hull <= 0) {
+			// if player is destroyed, end game
+			return this.gameOver();
+		} else {
+			alienShipFactory.ships[0].fire(target);
+		}
 	},
 	gameOver () {
-		// set conditions for game over if I am destroyed
-		// set conditions for if I win
+		// set condition for if player loses
+		if (this.playerShip.hull <= 0) {
+			console.log("The " + this.playerShip.name + " has been destroyed. Game over.");
+		} else {
+			// set conditions for if player wins
+			console.log("All alien enemies have been destroyed. " + this.playerShip.name + " wins!");
+		
+			// later, program prompt option to reset game
+		}
 	}
 };
 
-
-// create function to take turn
-// const gameTurn = () => {
-// 	// player attack
-
-// 	// set conditions for game over if I am destroyed
-// 	// set conditions for if I win
-// }
-
-// at the end of each turn, if I win, I should be able to choose to retreat or keep battling
-// const playerChoice = () => {
-// 	let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
-// 	gamePrompt;
-// 	if (gamePrompt === "Yes") {
-// 		return console.log("Game over.");
-// 	} else if (gamePrompt === "No") {
-// 		console.log("Another alien ship approaches!");
-// 		return gameTurn();
-// 	} else {
-// 		// if player doesn't respond with Yes or No
-// 		console.log("Please respond 'Yes' or 'No'");
-// 		gamePrompt;
-// 	}
-// };
-
 console.log(game.playerShip, alienShipFactory.ships);
 
-
-
+game.playerAttack()
