@@ -1,4 +1,4 @@
-console.log("this is a space battle game.");
+console.log('%c this is a space battle!', 'font-size: 40px');
 
 //six alien ships that attack one at a time
 //wait to see outcome
@@ -70,16 +70,16 @@ class SpaceBattle {
     //You attack the first alien ship
     //Make sure both hulls are above 0, otherwise, what is the point?
     if (this.alienShip1.hull > 0) {
-      console.log("USS assembly to attack");
+      console.log('%c USS assembly to attack!', 'color: green');
 
     if(Math.random() < this.ussAssembly.accuracy) {
       this.alienShip1.hull = this.alienShip1.hull - this.ussAssembly.firepower;
-        console.log("You hit the alien ship. The hull is now " + this.alienShip1.hull + ".");
+        console.log("You hit the alien ship. The hull is now"  + this.alienShip1.hull + ".");
         } else {
           console.log("you missed the alien ship. The hull remains " + this.alienShip1.hull + ".");
         }
     if(this.alienShip1.hull > 0) {
-      console.log("alien ship to attack");
+      console.log('%c alien ship to attack', 'color: red');
         } else {
           console.log("alien ship destroyed!");
       }
@@ -90,7 +90,7 @@ class SpaceBattle {
     this.ussAssembly.hull = this.ussAssembly.hull - this.alienShip1.firepower;
     console.log("You've been hit. The USS Assembly hull is now " + this.ussAssembly.hull + ".");
     } else {
-      console.log("Alien attack missed! The USS hull remains intact.");
+      console.log("Alien attack missed! The USS Assembly hull remains intact.");
     }
   if(this.ussAssembly.hull > 0) {
     console.log("USS Assembly to attack!");
@@ -101,3 +101,7 @@ class SpaceBattle {
 }
 
 const game1 = new SpaceBattle(ussAssembly, alienShip1)
+
+//now need to offer retreat option
+//more ships on the way! create an alien ship class?
+//how does that fit into the method logic?
