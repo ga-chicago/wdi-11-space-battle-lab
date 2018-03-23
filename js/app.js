@@ -231,8 +231,8 @@ const game = {
 // grab each button
 
 // const pauseButton = $("#pause");
-const fireButton = $("#fire-button");
-const startButton = $("#start-game");
+const fireButton = $("#fire");
+const startButton = $("#start");
 const retreatButton = $("#retreat");
 const resetButton = $("#reset");
 // const pauseButton = $("#pause");
@@ -242,10 +242,10 @@ const resetButton = $("#reset");
 // set conditionals for buttons so they can only be 
 // pressed the appropriate amount of times
 
-$("#fire-button").click(function(){
+$("#fire").click(function(){
 	game.playerAttack();
 });
-$("#start-game").click(function(){
+$("#start").click(function(){
 	game.gameStart();
 });
 
