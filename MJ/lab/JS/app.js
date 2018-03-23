@@ -15,23 +15,26 @@ class AlienShip {
 //factory to make alien ships
 class AlienShipFactory{
 	constructor(){
+		//this array will hold alien ship objects
 		this.alienShipArray = [];
 	}
+	//this will create alien ships if called
 	generateShip(){
 		const newShip = new AlienShip();
 
 		this.alienShipArray.push(newShip);
 	}
 }
-
+//instantiate alien object
+//alien ready to generate
 const alien = new AlienShipFactory();
 
-alien.generateShip();
-alien.generateShip();
-alien.generateShip();
-alien.generateShip();
-alien.generateShip();
-alien.generateShip();
+const ussAssemblyShip = {
+	hull: 20,
+	firepower: 5,
+	accuracy:.7
+};
+
 
 
 
