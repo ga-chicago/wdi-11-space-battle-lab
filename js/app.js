@@ -119,6 +119,7 @@ class PlayerShip extends Ship {
 	}
 }
 
+
 // generate alien ships
 // create a function to generate n ships
 
@@ -128,28 +129,60 @@ const makeAlienShips = (numShips) => {
 	}
 }
 
+const assembly = new PlayerShip (20, 5, 0.7);
+
+
+let enemyFleet = 0;
+
 const game = {
-	alienShips: makeAlienShips(6),
-	playerShip: new PlayerShip (20, 5, 0.7),
+	alienShips: enemyFleet,
+	attackingAlien: alienShipFactory.ships[0],
+	playerShip: assembly,
+	stats: {
+		// eventually, display these stats in browser
+		gamesWon: 0,
+		gamesLost: 0,
+		remainingAlienShips: alienShipFactory.ships.length,
+		playerHealth: assembly.hull,
+		attackingAlienHealth: 0
+	},
+	gameStart () {
+		// start message
+		console.log(assembly.name + " encounters a hostile alien armada!");
+		// generate alien fleet
+		makeAlienShips(getRandomNum(10));
+		enemyFleet = alienShipFactory.ships;
+		// assign attacking Alien
+		this.attackingAlien = alienShipFactory.ships[0];
+		// set attacking alien health
+		this.attackingAlienHealth = alienShipFactory.ships[0].hull;
+		// reset player health
+		assembly.hull = 20;
+		// first player attack
+		this.playerAttack();
+	},
 	playerChoice () {
-		let gamePrompt = prompt("Do you wish to retreat (Yes or No)?");
-		gamePrompt;
-		if (gamePrompt === "Yes") {
-			return console.log("Game over.");
-		} else if (gamePrompt === "No") {
-			console.log("Another alien ship approaches!");
-			return this.playerAttack();
-		} else {
-			// if player doesn't respond with Yes or No
-			console.log("Please respond 'Yes' or 'No'");
-			gamePrompt;
-		}
+		// with buttons, the below code isn't necessary
+		// but I'm keeping for posterity, and in case I want to go back
+		// let gamePrompt = prompt("Do you wish to retreat (Yes or No)? There are " + alienShipFactory.ships.length + " alien ships remaining.");
+		// gamePrompt;
+		// if (gamePrompt === "Yes") {
+		// 	return console.log("Game over.");
+		// } else if (gamePrompt === "No") {
+		// 	console.log("Another alien ship approaches!");
+		// 	return this.playerAttack();
+		// } else {
+		// 	// if player doesn't respond with Yes or No
+		// 	console.log("Please respond 'Yes' or 'No'");
+		// 	return this.playerChoice();
+		// }
 	},
 	// separate gameTurn method into playerAttack and alienAttack that can call each other
 	playerAttack () {
-		let target = alienShipFactory.ships[0];
+		let target = this.attackingAlien;
 		if (target.hull <= 0) {
 			// if alien is destroyed
+			console.log(target.name + " has been hit!");
 			console.log(target.name + " has been destroyed.");
 			// if destroyed, we will need to remove the first ship from that array
 			alienShipFactory.ships.shift();
@@ -159,36 +192,71 @@ const game = {
 				return this.gameOver();
 			}
 			// bring back prompt
-			return this.playerChoice();
+			// return this.playerChoice();
 		} else {
-
+			console.log(this.playerShip.name + " fires at the alien!");
 			return this.playerShip.fire(target);
 			// return this.alienAttack();
 		}
 	},
 	alienAttack () {
-		let target = this.playerShip;
+		let target = assembly;
 
 		if (target.hull <= 0) {
 			// if player is destroyed, end game
 			return this.gameOver();
 		} else {
-			alienShipFactory.ships[0].fire(target);
+			console.log(this.attackingAlien.name + " fires at " + this.playerShip.name + "!");
+			this.attackingAlien.fire(target);
 		}
 	},
 	gameOver () {
 		// set condition for if player loses
 		if (this.playerShip.hull <= 0) {
 			console.log("The " + this.playerShip.name + " has been destroyed. Game over.");
+			// add 1 to total games lost
+			this.stats.gamesLost += 1;
 		} else {
 			// set conditions for if player wins
 			console.log("All alien enemies have been destroyed. " + this.playerShip.name + " wins!");
-		
-			// later, program prompt option to reset game
+			this.stats.gamesWon += 1;
 		}
 	}
 };
 
-console.log(game.playerShip, alienShipFactory.ships);
+// BUTTONS
 
-game.playerAttack()
+// rep with jQuery
+
+// grab each button
+
+// const pauseButton = $("#pause");
+const fireButton = $("#fire-button");
+const startButton = $("#start-game");
+const retreatButton = $("#retreat");
+const resetButton = $("#reset");
+// const pauseButton = $("#pause");
+
+// CREATE BUTTON FUNCTIONS
+
+// set conditionals for buttons so they can only be 
+// pressed the appropriate amount of times
+
+$("#fire-button").click(function(){
+	game.playerAttack();
+});
+$("#start-game").click(function(){
+	game.gameStart();
+});
+
+$("#retreat").click(function(){
+	console.log("The " + assembly.name + " surrenders to the alien armada. Game over.");
+	game.stats.gamesLost += 1;
+});
+$("#reset").click(function(){
+	makeAlienShips(getRandomNum(10));
+	game.gameStart();
+});
+// $("#pause").click(function(){
+// 	break;
+// });
