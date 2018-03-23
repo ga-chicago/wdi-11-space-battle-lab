@@ -44,7 +44,7 @@ const spaceBattleGame = {
 
 	start(){
 		//Ask User
-		let startPrompt = prompt('How many Aliens Would You Like To Battle? (Number)')
+		let startPrompt = prompt('Please Ensure That You Are Using Full Screen:  How many Aliens Would You Like To Battle? (Number)')
 		//Call Function to call method that makes ships
 		this.howManyAliens(startPrompt);
 
@@ -58,7 +58,7 @@ const spaceBattleGame = {
 			alien.generateShip();
 		}
 		//display alien ships
-		console.log(aliens.alienShipArray);
+		console.log(alien.alienShipArray);
 
 		//Calls Function for user to Attack
 		this.ussAttack()
@@ -76,13 +76,20 @@ const spaceBattleGame = {
 			//USS Fires Missile At Alien
 			//If USS Hits Alien Ship
 			if(Math.random() >= this.ussAssemblyShip.accuracy){
+				
+				console.log("You Hit The Alien Ship!");
 				//decrement alien health if hit
 				alien.alienShipArray[0].hull -= this.ussAssemblyShip.firepower;
+
+				console.log("The Alien's Health: " + alien.alienShipArray[0].hull);
 				//if alien has no health remaining, remove from array, if alien is alive, then alien attacks
 				(alien.alienShipArray[0].hull <= 0) ? this.alienDecrement() : this.alienAttack()
 			}
 			//If you miss the alien
-			else{ this.alienAttack() }
+			else{ 
+				console.log('You Missed The Alien Ship!');
+				this.alienAttack() 
+			}
 
 		}
 		//If you wish to retreat
@@ -93,16 +100,25 @@ const spaceBattleGame = {
 
 	},
 	alienAttack(){
+		console.log( 'The Alien is Attacking!!');
 		//Alien attacks
 		//If Alien Hits Target
 		if(Math.random() >= alien.alienShipArray[0].accuracy){
+
+			console.log('Oh No! You\'ve Been Hit...');
 			//decrement health of USS
-			this.ussAssemblyShip.hull -= alienShipArray[0].firepower;
+			this.ussAssemblyShip.hull -= alien.alienShipArray[0].firepower;
+
+			console.log('Your Health: ' + this.ussAssemblyShip.hull );
 			//If USS is Alive, Uss Attacks, Else Game Over
 			(this.ussAssemblyShip.hull <= 0) ? this.gameOver() : this.ussAttack()
 		}
 		//If the Alien Misses You
-		else{ this.ussAttack() }
+		else{ 
+			console.log('The Alien Missed!');
+			this.ussAttack() 
+
+		}
 
 
 	},
@@ -110,23 +126,31 @@ const spaceBattleGame = {
 		//Remove Dead Alien From Array
 		alien.alienShipArray.splice(0,1);
 
-		console.log('You Killed An Alien!');
+		console.log('You Killed the Alien!');
 
 		console.log(alien.alienShipArray);
 		//Checks if All Aliens Are Destroyed in Array before moving on
 		if(alien.alienShipArray.length === 0){
+			
 			console.log('All Alien Ships Are Destroyed. You Win!!!');
+			alert('All Alien Ships Are Destroyed. You Win!!!');
 		}
 		//Attack Next Alien
-		else{ this.ussAttack() }
+		else{ 
+			console.log('More Aliens!!');
+			this.ussAttack() 
+
+		}
 
 	},
 	
 	gameOver(){
-
+		console.log('Game Over!');
 		alert('Game Over!');
 
-		return 0;
+
+
+		
 	}
 }
 
