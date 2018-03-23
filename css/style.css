@@ -29,15 +29,23 @@ h1{
 	z-index: 1;
 	font-family: "Press Start 2P", cursive;
 	font-size: 30px;
-/*	float: left;*/
-	border: 0.5px solid black;
 	display: inline;
 	color: white;
 	clear: both;
 	left: 33vw;
 	top: 5vh;
-/*	transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);*/
+}
+h2{
+	display: inline;
+	position: absolute;
+	z-index: 1;
+	font-family: "Limelight", cursive;
+	font-size: 18px;
+	display: inline;
+	color: white;
+	clear: both;
+	left: 80vw;
+	top: 97vh;
 }
 img {
 	width: 100vw;
@@ -58,8 +66,8 @@ img {
   -ms-transform: translate(-50%, -50%);
   background-color: #555;
   color: white;
-  font-size: 24px;
-  padding: 20px 24px;
+  font-size: 26px;
+  padding: 16px 20px;
   border: none;
   cursor: pointer;
   border-radius: 6px;
@@ -79,19 +87,3 @@ img {
 button:hover {
 	background-color: firebrick;
 }
-
-/*button {
-	float: left;
-	display: inline;
-	background-color: green;
-	font-color: white;
-	border: 1px dashed black;
-	clear: both;
-}*/
-/*img{
-	display: inline;
-	float: left;
-	margin: auto;
-	clear: both;
-}*/
- 

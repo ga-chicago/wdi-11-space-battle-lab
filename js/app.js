@@ -61,14 +61,32 @@ class Ship {
 			// some way to determine how much damage is done to target ship
 			// firepower - hull = damage
 			targetShip.hull = (health - firepower);
-			console.log(targetShip.name + " has been hit!");	
-			console.log(targetShip.name + " has " + health + " health left.");
+			console.log(targetShip.name + " takes " + firepower + " damage!");	
+			console.log(targetShip.name + " has " + targetShip.hull.toFixed(2) + " health left.");
 			if (targetShip === game.playerShip) {
-				// if the alien shot at the player, it's the player's turn
-				return game.playerAttack();
+			// if the alien shot at the player, it's the player's turn
+				if (targetShip.hull <= 0) {
+					// if player dies
+					game.gameOver();
+				} else {
+					return game.playerAttack();
+				}
 			} else if (targetShip === alienShipFactory.ships[0]) {
-				// if the player shot at the alien, it's the alien's turn
-				return game.alienAttack();
+				if (targetShip.hull <= 0) {
+					// if alien dies, remove ship from factory
+					alienShipFactory.ships.shift();
+					if (alienShipFactory.ships.length === 0) {
+						// if attacking ship dies and was the last ship.
+						game.gameOver();
+					} else {
+						// if there's still another ship after this one dies
+						// do nothing so player can press fire button in browser
+						console.log(targetShip.name + " has been destroyed.");
+					}
+				} else {
+					// if the player shot at the alien, it's the alien's turn
+					return game.alienAttack();
+				}
 			}
 		} else {
 			console.log(this.name + " missed!");
@@ -186,13 +204,6 @@ const game = {
 			console.log(target.name + " has been destroyed.");
 			// if destroyed, we will need to remove the first ship from that array
 			alienShipFactory.ships.shift();
-			// set condition for if no alien ships are left
-			if (alienShipFactory.ships.length === 0) {
-				// if all aliens are destroyed, end game
-				return this.gameOver();
-			}
-			// bring back prompt
-			// return this.playerChoice();
 		} else {
 			console.log(this.playerShip.name + " fires at the alien!");
 			return this.playerShip.fire(target);
@@ -214,11 +225,13 @@ const game = {
 		// set condition for if player loses
 		if (this.playerShip.hull <= 0) {
 			console.log("The " + this.playerShip.name + " has been destroyed. Game over.");
+			console.log("Press start to play again!");
 			// add 1 to total games lost
 			this.stats.gamesLost += 1;
 		} else {
 			// set conditions for if player wins
 			console.log("All alien enemies have been destroyed. " + this.playerShip.name + " wins!");
+			console.log("Press start to play again!");
 			this.stats.gamesWon += 1;
 		}
 	}
@@ -235,7 +248,6 @@ const fireButton = $("#fire");
 const startButton = $("#start");
 const retreatButton = $("#retreat");
 const resetButton = $("#reset");
-// const pauseButton = $("#pause");
 
 // CREATE BUTTON FUNCTIONS
 
@@ -243,20 +255,33 @@ const resetButton = $("#reset");
 // pressed the appropriate amount of times
 
 $("#fire").click(function(){
-	game.playerAttack();
+	if (alienShipFactory.ships.length > 0) {
+		game.playerShip.fire(alienShipFactory.ships[0]);
+	}
 });
 $("#start").click(function(){
-	game.gameStart();
+	// set condition for use of this button.
+	if (alienShipFactory.ships.length === 0) {
+		game.gameStart();
+	}
 });
 
 $("#retreat").click(function(){
-	console.log("The " + assembly.name + " surrenders to the alien armada. Game over.");
-	game.stats.gamesLost += 1;
+	if (alienShipFactory.ships.length > 0) {
+		console.log("The " + assembly.name + " surrenders to the alien armada. Game over.");
+		console.log("Press start to play!");
+		game.stats.gamesLost += 1;
+	}
 });
+
 $("#reset").click(function(){
-	makeAlienShips(getRandomNum(10));
-	game.gameStart();
+	console.clear();
+	// reset alien ships, games stats
+	alienShipFactory.ships = [];
+	game.stats.gamesWon = 0;
+	game.stats.gamesLost = 0;
 });
-// $("#pause").click(function(){
-// 	break;
-// });
+
+// DISPLAY STATS
+
+
