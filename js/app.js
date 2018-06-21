@@ -1,5 +1,5 @@
 console.log("Working");
-
+$("document").ready(function(){
 
 class AlienShip {
 	constructor() {
@@ -49,7 +49,7 @@ gameObject = {
 	},
 	nextRound() {
 		if (userInput.toLowerCase() === "retreat" ) {
-			return alert("Game Over");		
+			return alert("Game Over Wimp!");		
 		} else if (this.liveAlienShips.length === 0) {
 			alert("Game Over");
 		} else {
@@ -85,7 +85,7 @@ gameObject = {
 
 gameObject.combat();
 
-
+})
 
 
 
